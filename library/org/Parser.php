@@ -24,7 +24,7 @@ class Parser
     public static function parse($content, $type)
     {
         if (!isset(self::$handler[$type])) {
-            $class                = '\\org\\parser\\driver\\' . strtolower($type);
+            $class                = '\\org\\parser\\driver\\' . ucwords($type);
             self::$handler[$type] = new $class();
         }
         return self::$handler[$type]->parse($content);

@@ -36,7 +36,7 @@ class Oauth
      */
     public static function connect($type, $options = [])
     {
-        $class         = '\\org\\oauth\\driver\\' . strtolower($type);
+        $class         = '\\org\\oauth\\driver\\' . ucwords($type);
         self::$handler = new $class($options);
         return self::$handler;
     }

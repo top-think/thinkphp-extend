@@ -12,7 +12,8 @@
 namespace org;
 
 // 内容解析类
-use think\Exception as Exception;
+use think\Exception;
+
 class Transform
 {
     private static $handler = [];
@@ -26,7 +27,7 @@ class Transform
     private static function init($type)
     {
         if (!isset(self::$handler[$type])) {
-            $class                = '\\org\\transform\\driver\\' . strtolower($type);
+            $class                = '\\org\\transform\\driver\\' . ucwords($type);
             self::$handler[$type] = new $class();
         }
     }
