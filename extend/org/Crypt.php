@@ -125,9 +125,12 @@ class Crypt
         $expire = substr($value, self::HMAC_SIZE, self::EXPIRE_SIZE);
         $iv     = substr($value, self::HMAC_SIZE + self::EXPIRE_SIZE, self::IV_SIZE);
         $value  = substr($value, self::HMAC_SIZE + self::EXPIRE_SIZE + self::IV_SIZE);
+        $expire = hexdec(bin2hex($expire));
         // 超出有效期
-        if (time() > hexdec(bin2hex($expire))) {
-            return false;
+        if($expire!==0){
+            if (time() > hexdec(bin2hex($expire))) {
+                return false;
+            }
         }
         // 验证密文是否被篡改
         if (static::compareString(static::hmac($iv, $value, $key), bin2hex($hmac)) === false) {
