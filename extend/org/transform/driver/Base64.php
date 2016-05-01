@@ -32,7 +32,7 @@ class Base64
      * @param string $data   欲编码的数据
      * @param string $target 编码目标
      */
-    public function encode($data, $target = '')
+    public static function encode($data, $target = '')
     {
         // 当函数没有特别指定编码目标时, 使用类自身编码目标
         if (empty($target)) {
@@ -62,7 +62,7 @@ class Base64
      * @param string $data   欲解码的数据
      * @param string $target 解码目标
      */
-    public function decode($data, $target = '')
+    public static function decode($data, $target = '')
     {
         // 当函数没有特别指定解码目标时, 使用类自身解码目标
         if (empty($target)) {
