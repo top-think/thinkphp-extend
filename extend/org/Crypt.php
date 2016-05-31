@@ -95,7 +95,7 @@ class Crypt
         $value = static::packing($value);
         // 加密数据
         $value = openssl_encrypt($value, self::CIPHER_MODE, $key, OPENSSL_RAW_DATA, $iv);
-        if ($value === false) {
+        if (false === $value) {
             return false;
         }
         // 加密有效期
@@ -104,7 +104,8 @@ class Crypt
         // 生成密文校验码
         $hmac = static::hmac($iv, $value, $key);
         // 组合加密结果并base64编码
-        return Base64::encode(pack('H*', $hmac . $expire) . $iv . $value, $target);
+        $base = new Base64();
+        return $base->encode(pack('H*', $hmac . $expire) . $iv . $value, $target);
     }
 
     /**
@@ -119,7 +120,8 @@ class Crypt
     public static function decrypt($value, $key, $target = 'url')
     {
         // Base64解码
-        $value = Base64::decode($value, $target);
+        $base  = new Base64();
+        $value = $base->decode($value, $target);
         // 拆分加密结果(校验码, 有效期, 初始化向量, 加密数据)
         $hmac   = substr($value, 0, self::HMAC_SIZE);
         $expire = substr($value, self::HMAC_SIZE, self::EXPIRE_SIZE);
@@ -135,7 +137,7 @@ class Crypt
         }
         // 解密数据
         $value = openssl_decrypt($value, self::CIPHER_MODE, $key, OPENSSL_RAW_DATA, $iv);
-        if ($value === false) {
+        if (false === $value) {
             return false;
         }
         // 反序列化
@@ -156,7 +158,7 @@ class Crypt
         if (function_exists('openssl_random_pseudo_bytes')) {
             $bytes = openssl_random_pseudo_bytes($size, $strong);
         }
-        if (is_null($bytes) || $bytes === false || $strong === false) {
+        if (is_null($bytes) || false === $bytes || false === $strong) {
             $size *= 2;
             $pool  = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $bytes = pack('H*', substr(str_shuffle(str_repeat($pool, $size)), 0, $size));
@@ -222,7 +224,7 @@ class Crypt
         }
         // 字符串长度不相等可直接返回
         $length = strlen($known);
-        if ($length !== strlen($input)) {
+        if (strlen($input) !== $length) {
             return false;
         }
         // 逐位比较字符串
@@ -231,7 +233,7 @@ class Crypt
         for ($i = 0; $i < $length; $i++) {
             $result |= (ord($known[$i]) ^ ord($input[$i]));
         }
-        return $result === 0;
+        return 0 === $result;
     }
 
 }
